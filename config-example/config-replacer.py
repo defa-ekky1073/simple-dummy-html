@@ -3,29 +3,33 @@ import os
 
 import yaml
 
-def replace_nested_key(data, key_path, new_value):
-    """Replaces the value of a nested key in a dictionary."""
+def search_key(data, key_path, new_value):
     keys = key_path.split(".")
     current_level = data
     for i, key in enumerate(keys):
         if i == len(keys) - 1:  # Last key, replace value
             if key in current_level:
                 current_level[key] = new_value
+                return True  # Key found and value replaced
         elif key in current_level:
             current_level = current_level[key]
         else:
-            return  # Key not found
+            return False  # Key not found
+    return False  # In case the loop completes without finding the key
 
 def process_yaml_file(file_path, key_path, new_value):
-    """Loads, modifies, and saves a YAML file."""
     with open(file_path, 'r') as f:
         data = yaml.safe_load(f)
-
-    replace_nested_key(data, key_path, new_value)
-
-    with open(file_path, 'w') as f:
-        yaml.dump(data, f, indent=2)
-
+    
+    key_found = search_key(data, key_path, new_value)
+    print(f"Searching for '{key_path}' in {file_path}")
+    
+    if key_found:
+        print(f"Key '{key_path}' found and value replaced.")
+        with open(file_path, 'w') as f:
+            yaml.dump(data, f, indent=2)
+    else:
+        print(f"Key '{key_path}' not found.")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Key-value pair replacer for YAML files.")
