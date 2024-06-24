@@ -1,6 +1,5 @@
 import argparse
 import os
-
 import yaml
 
 def search_key(data, key_path, new_value):
