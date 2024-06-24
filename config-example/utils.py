@@ -35,11 +35,7 @@ def update_value(obj, key, new_value):
       update_value(item, key, new_value)
   return obj
 
-def replace_key_value(file, contents, key, value):  
-  if key is None or value is None:
-    print('Please input the key and value you want to change!')
-    return
-  
+def replace_key_value(file, contents, key, value):
   updated_value = update_value(contents, key, value)
   with open(file, 'w') as f:
     yaml.safe_dump(updated_value, f)

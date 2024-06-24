@@ -16,7 +16,21 @@ working_dir = os.getcwd()
 files = load_yaml_files(working_dir)
 contents = read_yaml_contents(files)
 
+# input validator
 try:
+  args_value = int(args_value)
+except:
+  args_value = args_value
+
+if args_value == 'true':
+  args_value = True
+if args_value == 'false':
+  args_value = False
+
+try:
+  if args_key is None or args_value is None:
+    print('Please input the key and value you want to change!')
+    raise
   for file, content in contents.items():
     replace_key_value(file, content, args_key, args_value)
     print(f'Successfully update key `{args_key}` to `{args_value}` value')
