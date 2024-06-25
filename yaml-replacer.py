@@ -56,10 +56,9 @@ def update_yaml_with_specified_path(filepath, child, value):
                 current = data
                 for key in child[:-1]:
                     current = current.setdefault(key, {})
-                    print(key)
                 if child[-1] in current:
                     print("replacing on: " + file)
-                    current[child[-1]] = args.value
+                    current[child[-1]] = value
                     with open(file, 'w') as stream:
                         yaml.dump(data, stream, default_flow_style=False, sort_keys=False)
             except:
@@ -73,7 +72,7 @@ def main():
     filepath = get_all_file_in_directory(dirPath)
 
     if "." in args.key:
-        child = child = args.key.split(".")
+        child = args.key.split(".")
         update_yaml_with_specified_path(filepath, child, args.value)
     else:
         for file in filepath:
