@@ -24,7 +24,7 @@ jobs:
       - name: Build Go
         run: |
           cd go-test
-          ls-la
+          ls -la
           go build
       - name: Run Go
         run: ./ekky-gotest
