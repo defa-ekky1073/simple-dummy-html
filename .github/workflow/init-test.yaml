@@ -3,7 +3,7 @@ name: init-test
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   print-hello-worlds:
