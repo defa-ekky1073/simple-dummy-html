@@ -22,9 +22,8 @@ jobs:
         with:
           go-version: 1.22
       - name: Build Go
-        run: |
-          cd go-test
-          ls -la
-          go build
+        run: go build
+        working-directory: ./go-test
       - name: Run Go
         run: ./ekky-gotest
+        working-directory: ./go-test
