@@ -1,6 +1,12 @@
 name: init-test
 
 on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Name of the person to greet'
+        required: true
+        default: 'World'
   push:
     branches:
       - main
@@ -10,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Print Hello World
-        run: echo "Hello World"
+        run: echo "Hello ${{ github.event.inputs.name }}!"
   
   go-test:
     runs-on: ubuntu-latest
