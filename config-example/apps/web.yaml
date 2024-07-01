@@ -1,6 +1,7 @@
 web:
   host: www.example.com
   port: 80
+  database: db.staging.example.com
   ssl_enabled: true
   ssl_certificate: /path/to/certificate.crt
   ssl_key: /path/to/key.key

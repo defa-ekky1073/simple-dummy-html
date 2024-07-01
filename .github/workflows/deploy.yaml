@@ -1,0 +1,51 @@
+name: deploy
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    paths:
+      - 'config-example/**'
+      - '.github/workflows/deploy.yaml'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        type: choice
+        options:
+          - staging
+          - production
+        default: 'staging'
+  
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Setup Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.22
+    - name: Run Replacer
+      working-directory: config-example
+      run: go run main.go -key currency -value EUR
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v3
+      with:
+        token: ${{ secrets.TOKEN }}
+        commit-message: "Edit Configuration"
+        title: "Deploy Configuration Changes"
+        body: |
+          This pull request was automatically`.
+
+          Checkout the branch `${{ github.actor }}/deploy-${{ github.event.inputs.environment }}` to see the changes.
+        branch: "${{ github.actor }}/generate-${{ github.event.inputs.environment }}"
+        base: "main"
+        labels: "automated"
+        assignees: ${{ github.actor }}
+        draft: false
