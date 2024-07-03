@@ -44,7 +44,7 @@ jobs:
         fi
     - name: Run Replacer
       working-directory: config-example
-      run: go run main.go -key database -value ${{ steps.search.outputs.database-host }}
+      run: go run main.go -key database -value ${{ steps.search.outputs.database-host }} replace
     - name: Set instance key
       run: |
         echo "${{ secrets.INSTANCE_KEY }}" > instance.pem
