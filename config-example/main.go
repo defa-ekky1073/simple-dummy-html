@@ -146,7 +146,7 @@ func main() {
 
 	args := flag.Args()
 	if len(args) == 0 {
-		log.Fatal("Please provide a subcommand: search or replace")
+		log.Fatal("Please provide a subcommand: get-database-host or replace")
 	}
 	subcommand := args[0]
 
