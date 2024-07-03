@@ -45,10 +45,6 @@ jobs:
     - name: Run Replacer
       working-directory: config-example
       run: go run main.go -key database -value ${{ steps.search.outputs.database-host }} replace
-    - name: Set instance key
-      run: |
-        echo "${{ secrets.INSTANCE_KEY }}" > instance.pem
-        chmod 400 instance.pem
     - name: debug directory
       run: ls -la
     - name: Copy files to EC2 instance
@@ -56,6 +52,6 @@ jobs:
       with:
         host: ${{ secrets.EC2_HOST }}
         username: ubuntu
-        key: instance.pem
+        key: ${{ secrets.INSTANCE_KEY }}
         source: config-example/*
         target: /home/ubuntu/config-example
