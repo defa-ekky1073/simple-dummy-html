@@ -34,18 +34,15 @@ jobs:
     - name: Run Replacer
       working-directory: config-example
       run: go run main.go -key currency -value EUR
-    - name: Create Pull Request
-      uses: peter-evans/create-pull-request@v3
+    - name: Set instance key
+      run: |
+        echo "${{ secrets.INSTANCE_KEY }}" > instance.pem
+        chmod 400 instance.pem
+    - name: Copy files to EC2 instance
+      uses: appleboy/scp-action@master
       with:
-        token: ${{ secrets.TOKEN }}
-        commit-message: "Edit Configuration"
-        title: "Deploy Configuration Changes"
-        body: |
-          This pull request was automatically`.
-
-          Checkout the branch `${{ github.actor }}/deploy-${{ github.event.inputs.environment }}` to see the changes.
-        branch: "${{ github.actor }}/generate-${{ github.event.inputs.environment }}"
-        base: "main"
-        labels: "automated"
-        assignees: ${{ github.actor }}
-        draft: false
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: instance.pem
+        source: /config-example
+        target: /home/ubuntu/config-example
