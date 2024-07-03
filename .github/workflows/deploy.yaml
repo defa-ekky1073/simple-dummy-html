@@ -15,9 +15,9 @@ on:
         required: true
         type: choice
         options:
-          - staging
-          - production
-        default: 'staging'
+          - stg
+          - prod
+        default: 'stg'
   
 
 jobs:
@@ -31,9 +31,15 @@ jobs:
       uses: actions/setup-go@v2
       with:
         go-version: 1.22
+    - name: Run Search
+      id: search
+      working-directory: config-example
+      run: |
+        output=$(go run main.go -env ${{ github.event.inputs.environment }} get-database-host)
+        echo "::set-output name=database-host::$output"
     - name: Run Replacer
       working-directory: config-example
-      run: go run main.go -key currency -value EUR
+      run: go run main.go -key database -value ${{ steps.search.outputs.database-host }}
     - name: Set instance key
       run: |
         echo "${{ secrets.INSTANCE_KEY }}" > instance.pem
